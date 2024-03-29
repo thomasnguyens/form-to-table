@@ -147,7 +147,7 @@
             // 80-90 : B 3.0
             // 90-100: A 4.0
             for (i in score_array){ // calculating the score total in array
-                if (score_array[i] >=93){
+                if (score_array[i] >=93 && score_array[i]<= 100){
                     score_total += 4.0;
                 }
                 else if(score_array[i] >= 90 && score_array[i] < 92){
@@ -168,7 +168,11 @@
                 else if(score_array[i] >= 70 && score_array[i] < 77){
                     score_total += 2.0;
                 }
+                else{ // if score is not a valid number or too high
+                    score_total = score_total;
+                }
             }
+            // calculating their GPA
             gpa_score = score_total / 4;
             return gpa_score;
         }
