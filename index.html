@@ -4,8 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
 </head>
 <body>
-    empty table for tomrrw
+    
+    <!-- Brainstorming
+    1) Make input buttons for 4 different subjects
+    2) be able to spew that out below
+    3) need a calculateGPA function that takes the average of all their marks
+    60-70 : D 1.0
+    70-80 : C 2.0
+    80-90 : B 3.0
+    90-100: A 4.0
+
+    4) reveal a new table after onclick that shows the marks of all the subjects
+    5) this table needs to be created line by line it cant just appear!
+    
+    -->
+
+    <div class="container m-4"> <!-- need this container for alignment purposes-->
+        <div id = "firstForm"> <!-- need a separate div w/ id so that all the content can be replaced-->
+            <h2 class="display-5" style="text-align:center;"> GPA Calculator</h2>
+            <div class="row mb-3"> <!--subject1-->
+                <!-- bootstrap labels are specified in class-->
+                <label for = "grade1" class="col-sm-2 col-form-label">subject 1: </label> <!-- col form-->
+                <div class="col-md-6">
+                    <input 
+                        class= "form-control" 
+                        type = "number" 
+                        name="grade1" 
+                        id="grade1"
+                        aria-describedby = ""
+                        placeholder = "">
+                </div>
+            </div>
+            <div class="row mb-3"><!-- subject2-->
+                <!-- bootstrap labels are specified in class-->
+                <label for = "grade1" class="col-sm-2 col-form-label">subject 2: </label> <!-- col form-->
+                <div class="col-md-6">
+                    <input 
+                        class= "form-control" 
+                        type = "number" 
+                        name="grade2" 
+                        id="grade2"
+                        aria-describedby = ""
+                        placeholder = "">
+                </div>
+            </div>
+            <div class="row mb-3"> <!--subject3-->
+                <!-- bootstrap labels are specified in class-->
+                <label for = "grade1" class="col-sm-2 col-form-label">subject 3: </label> <!-- col form-->
+                <div class="col-md-6">
+                    <input 
+                        class= "form-control" 
+                        type = "number" 
+                        name="grade3" 
+                        id="grade3"
+                        aria-describedby = ""
+                        placeholder = "">
+                </div>
+            </div>
+            <div class="row mb-3"> <!-- subject4-->
+                <!-- bootstrap labels are specified in class-->
+                <label for = "grade4" class="col-sm-2 col-form-label">subject 4: </label> <!-- col form-->
+                <div class="col-md-6">
+                    <input 
+                        class= "form-control" 
+                        type = "number" 
+                        name="grade4" 
+                        id="grade4"
+                        aria-describedby = ""
+                        placeholder = ""><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <button onclick = "getTable()" type = "button" class="btn btn-primary"> Submit </button>
+                </div>
+                <div class="col-auto">
+                    <button onclick = "resetContent()" type = "button" class="btn btn-secondary" id ="reset"> Reset </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id = "testing">
+    </div>
+
+        
+    <script>
+        function getTable(){// creates a table with the subject marks!
+
+            // storing the grades from each subject into a variable
+            var mark1 = parseInt(document.getElementById('grade1').value);
+            var mark2 = parseInt(document.getElementById('grade2').value);
+            var mark3 = parseInt(document.getElementById('grade3').value);
+            var mark4 = parseInt(document.getElementById('grade4').value);
+            var sumOfMarks = mark1 + mark2 + mark3 + mark4; // adds up all the values
+            
+            // caculating the gpa of all the scores
+            var overallGPA = gpaCalc(mark1, mark2, mark3, mark4);
+            var gpaFormat = `<p class='fs-4'> Overall GPA: ${overallGPA}</p>` // formatting gpaScore
+
+
+            // initiating a table
+            let tab = "<table class= 'table table-striped dark-table w-50'>"; 
+
+            
+            let head = `<tr><th>Subject</th> <th>Marks</th></tr>`; // table headers
+            let sub1 = `<tr><td> subject1 </td> <td> ${mark1} </td></tr>`; // subject1 table data
+            let sub2 = `<tr><td> subject2 </td> <td> ${mark2} </td></tr>`; // subject2 table data
+            let sub3 = `<tr><td> subject3 </td> <td> ${mark3} </td></tr>`; // subject3 table data
+            let sub4 = `<tr><td> subject4 </td> <td> ${mark4} </td></tr>`; // subject4 table data
+
+            // adding them all up
+            tab = tab + head + sub1 + sub2 + sub3 + sub4 + '<tr>';
+
+            tab = tab + "</tr>"; // closes the rows
+            tab = tab + "</table>"; // closes the table
+            
+            let headLabel = `<div class='container m-4'><small id='helpId' class='form-text text-muted'>After Marks Submitted</small>`;
+            headLabel = headLabel + `<h2 class='display-5'> Subject Marks and GPA</h2></div>`;
+            
+            let resetButton = `<div class='col-auto'>
+                    <button onclick = 'resetContent2()' type = 'button' class='btn btn-secondary' id ='reset'> Reset </button>
+                </div>`
+
+            // now store the data into the id spcecified in body (its id =gridTable)
+            // replaces the content in firstForm with this data
+            document.getElementById('firstForm').innerHTML = headLabel + tab + resetButton + gpaFormat; 
+
+        }
+        function gpaCalc(s1, s2, s3, s4){
+            let score_array = [s1, s2, s3, s4];
+            var score_total = 0, gpa_score = 0;
+            
+
+
+            // 60-70 : D 1.0
+            // 70-80 : C 2.0
+            // 80-90 : B 3.0
+            // 90-100: A 4.0
+            for (i in score_array){ // calculating the score total in array
+                if (score_array[i] >=93){
+                    score_total += 4.0;
+                }
+                else if(score_array[i] >= 90 && score_array[i] < 92){
+                    score_total += 3.7;
+                }
+                else if(score_array[i] >= 89 && score_array[i] < 93){
+                    score_total += 3.3;
+                }
+                else if(score_array[i] >= 83 && score_array[i] < 89){
+                    score_total += 3.0;
+                }
+                else if(score_array[i] >= 80 && score_array[i] < 83){
+                    score_total += 2.7;
+                }
+                else if(score_array[i] >= 77 && score_array[i] < 80){
+                    score_total += 2.3;
+                }
+                else if(score_array[i] >= 70 && score_array[i] < 77){
+                    score_total += 2.0;
+                }
+            }
+            gpa_score = score_total / 4;
+            return gpa_score;
+        }
+        function resetContent(){ // empties each field entries! [used for the first form]
+            document.getElementById('grade1').value = ""; 
+            document.getElementById('grade2').value = "";
+            document.getElementById('grade3').value = "";
+            document.getElementById('grade4').value = "";
+        }
+        function resetContent2(){
+            var storeGrid = document.getElementById('firstForm').innerHTML;
+        }
+
+    </script>
 </body>
 </html>
